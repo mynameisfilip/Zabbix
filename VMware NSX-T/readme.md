@@ -8,7 +8,7 @@ Before using this template, ensure that you meet the following prerequisites:
 
 - Zabbix 6.0 or newer
 - VMware NSX-T 3.2 or higher
-- HTTPS acces to NSX-T Manager API from Zabbix server
+- HTTPS access to NSX-T Manager API from Zabbix server
 - Read-only Principal identity user created in NSX-T
 
 ## Installation
