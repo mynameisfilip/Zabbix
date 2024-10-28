@@ -4,16 +4,15 @@ This repository contains a **Zabbix Monitoring Templates** specifically designed
 
 - **NSX Management** 
   - Management cluster status
-  - Manager Nodes status
+  - Manager Node status
     - Service status, CPU/Memory usage, Filesystem information, Uptime
 - **NSX Fabric**
   - Edge cluster status
-  - Edge Transport nodes status
+  - Edge Transport node status
     -  CPU/Memory usage, Filesystem information, Uptime
-    -  Network interfaces status
-    -  Network interfaces statistics
-       - rx/tx bytes/packets/drops
-- **Tier-0 and Tier-1 Gateways**
+    -  Network interface status
+    -  Network interface statistics
+       - rx/tx bytes/packets
 
 
 ## Requirements
@@ -38,4 +37,4 @@ Follow these steps to install and configure the VMware NSX-T Zabbix Monitoring T
    - SSLCertLocation "/usr/share/zabbix/ssl/certs"
    - SSLKeyLocation "/usr/share/zabbix/ssl/keys"
 4. Link template *Template_NSX_Cluster_Management* to a Zabbix host representing your NSX-T Management cluster VIP or hostname.
-5. Host discovery rules in template *Template_NSX_Cluster_Management* will create Zabbix hosts for each NSX-T Manager Nodes and NSX-T Edge Transport Nodes.
+5. Host discovery rules in template *Template_NSX_Cluster_Management* will create Zabbix hosts for each NSX-T Manager Node and NSX-T Edge Transport Node.
