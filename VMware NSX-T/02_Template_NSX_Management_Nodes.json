@@ -1,0 +1,949 @@
+{
+    "zabbix_export": {
+        "version": "6.0",
+        "date": "2025-01-17T15:11:02Z",
+        "groups": [
+            {
+                "uuid": "d1a86d4a9ad545ce98deaa658aeeaac0",
+                "name": "Templates"
+            }
+        ],
+        "templates": [
+            {
+                "uuid": "759f4b8682584279819af5418947e2a4",
+                "template": "Template NSX Management Nodes",
+                "name": "Template NSX Management Nodes",
+                "description": "Template to be linked to NSX management nodes.",
+                "templates": [
+                    {
+                        "name": "Template NSX Macros"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates"
+                    }
+                ],
+                "items": [
+                    {
+                        "uuid": "4d60d1e0e3544df28b22299d2c9eb1c3",
+                        "name": "CPU Load avg 1 min",
+                        "type": "DEPENDENT",
+                        "key": "node.cpu.load.avg1",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "description": "One minute average system cpu load.",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.system_status.load_average[0]"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "cpu"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "13a4f1cefa034364abdaee488850d5f5",
+                        "name": "CPU Load avg 5 min",
+                        "type": "DEPENDENT",
+                        "key": "node.cpu.load.avg5",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "description": "Five minute average system cpu load.",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.system_status.load_average[1]"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "cpu"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "5186b0adcbad435c90b1ce9add25c359",
+                                "expression": "last(/Template NSX Management Nodes/node.cpu.load.avg5)>10",
+                                "name": "CPU Load avg 5 min > 10",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "69f7fbcf652d4b64954bdabd0a6c5cd6",
+                        "name": "CPU Load avg 15 min",
+                        "type": "DEPENDENT",
+                        "key": "node.cpu.load.avg15",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "description": "Fifeteen minute average system cpu load.",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.system_status.load_average[2]"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "cpu"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "6be15b1b2ad04d149c8c8201e33f0ef6",
+                        "name": "Memory Free",
+                        "type": "CALCULATED",
+                        "key": "node.memory.free",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "units": "B",
+                        "params": "last(//node.memory.total)-last(//node.memory.used)",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "memory"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "1f15d7c6231a4c64b695d2096108029a",
+                        "name": "Memory Free (percentage)",
+                        "type": "CALCULATED",
+                        "key": "node.memory.pfree",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "params": "100-(last(//node.memory.used)/last(//node.memory.total)*100)",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "memory"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "02dcb90dbdf94e9b809eb053c681c95a",
+                                "expression": "last(/Template NSX Management Nodes/node.memory.pfree)<5",
+                                "name": "Memory Free < 5%",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "1b65ae9f15f94dd4aae27540fe6d6e10",
+                        "name": "Memory Total",
+                        "type": "DEPENDENT",
+                        "key": "node.memory.total",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "units": "B",
+                        "description": "Amount of RAM allocated to the system, in kilobytes",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.system_status.mem_total"
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "memory"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "70d0573277384ab4a8e88d4eedcd7f58",
+                        "name": "Memory Used",
+                        "type": "DEPENDENT",
+                        "key": "node.memory.used",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "units": "B",
+                        "description": "Amount of RAM in use on the system, in kilobytes",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.system_status.mem_used"
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "memory"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "8cf4492756c744fb89d65bb3885429bb",
+                        "name": "Node MGMT Cluster Status",
+                        "type": "DEPENDENT",
+                        "key": "node.mgmt.cluster.status",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Status of this node's connection to the management cluster\nEnum: CONNECTED, DISCONNECTED, UNKNOWN",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.mgmt_cluster_status.mgmt_cluster_status"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "triggers": [
+                            {
+                                "uuid": "58ce76a6c1664e75a21298d3417a9ba9",
+                                "expression": "not(last(/Template NSX Management Nodes/node.mgmt.cluster.status)=\"CONNECTED\")",
+                                "name": "Management Node status is {ITEM.VALUE1}",
+                                "priority": "HIGH",
+                                "description": "NSX Management node \"mgmt_cluster_status\" is not \"CONNECTED\""
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "457dd89375014896a66cf07b78220376",
+                        "name": "Repo Sync Status",
+                        "type": "HTTP_AGENT",
+                        "key": "node.reposync.status",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/nodes/<cluster-node-id>/repo_sync/status\nSynchronizes the repository data between nsx managers.\nReturns the synchronization status for the manager represented by given <node-id>.\nEnum: NOT_STARTED, IN_PROGRESS, FAILED, SUCCESS",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.status"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/nodes/{HOST.HOST}/repo_sync/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "057f38b9b2eb4f3c96439a9aa1b8ce42",
+                                "expression": "not(last(/Template NSX Management Nodes/node.reposync.status)=\"SUCCESS\")",
+                                "name": "Repo Sync Status is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "a84185f41d4a4ee7935d7e11cb3918df",
+                        "name": "Service Status - Async Replicator",
+                        "type": "HTTP_AGENT",
+                        "key": "node.service.status.asyncreplicator",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/<cluster-node-id>/node/services/async_replicator/status\nRead the Async Replicator service status\nEnum: running, stopped",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.monitor_runtime_state"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/{HOST.HOST}/node/services/async_replicator/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "5d01a807522b425b873e83139b1a242d",
+                                "expression": "not(last(/Template NSX Management Nodes/node.service.status.asyncreplicator)=\"running\")",
+                                "name": "Service Status - Async Replicator is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "ee77e26b1dea463e80bf07e4f13d84c7",
+                        "name": "Service Status - Cluster Boot Manager",
+                        "type": "HTTP_AGENT",
+                        "key": "node.service.status.clustermanager",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/<cluster-node-id>/node/services/cluster_manager/status\nRead cluster boot manager service status\nEnum: running, stopped",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.monitor_runtime_state"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/{HOST.HOST}/node/services/cluster_manager/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "ecffa75e24a24901af3b4d57b6f7558b",
+                                "expression": "not(last(/Template NSX Management Nodes/node.service.status.clustermanager)=\"running\")",
+                                "name": "Service Status - Cluster Boot Manager is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "ccfc2b8a980d4c76a2b6309c0623efe5",
+                        "name": "Service Status - CM-Inventory",
+                        "type": "HTTP_AGENT",
+                        "key": "node.service.status.cminventory",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/<cluster-node-id>/node/services/cm-inventory/status\nRead cm-inventory service status\nEnum: running, stopped",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.monitor_runtime_state"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/{HOST.HOST}/node/services/cm-inventory/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "5cf6eaf6487741598e42a185c17f2ead",
+                                "expression": "not(last(/Template NSX Management Nodes/node.service.status.cminventory)=\"running\")",
+                                "name": "Service Status - CM-Inventory is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "acc801b22e284549804ed48f2875dc2a",
+                        "name": "Service Status - Controller",
+                        "type": "HTTP_AGENT",
+                        "key": "node.service.status.controller",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/<cluster-node-id>/node/services/controller/status\nRead Controller service status\nEnum: running, stopped",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.monitor_runtime_state"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/{HOST.HOST}/node/services/controller/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "752147ef09034ac5b8abfcbf7e299497",
+                                "expression": "not(last(/Template NSX Management Nodes/node.service.status.controller)=\"running\")",
+                                "name": "Service Status - Controller is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "eb619f69f4c14fc08aec2104a09ef02d",
+                        "name": "Service Status - HTTP",
+                        "type": "HTTP_AGENT",
+                        "key": "node.service.status.http",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/<cluster-node-id>/node/services/http/status\nRead https service status\nEnum: running, stopped",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.monitor_runtime_state"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/{HOST.HOST}/node/services/http/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "fad369e0e41e4ec4abcafb4f406a662e",
+                                "expression": "not(last(/Template NSX Management Nodes/node.service.status.http)=\"running\")",
+                                "name": "Service Status - HTTP is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "b648fb5e33b8405d94561ede42f5390a",
+                        "name": "Service Status - IDPS Reporting",
+                        "type": "HTTP_AGENT",
+                        "key": "node.service.status.idps",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/<cluster-node-id>/node/services/idps-reporting/status\nRead the idps-reporting service status\nEnum: running, stopped",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.monitor_runtime_state"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/{HOST.HOST}/node/services/idps-reporting/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "3c062b20a87a468f8d54b7b3ced22eac",
+                                "expression": "not(last(/Template NSX Management Nodes/node.service.status.idps)=\"running\")",
+                                "name": "Service Status - IDPS Reporting is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "260e6098f2884abe9a718c4dde4c2d65",
+                        "name": "Service Status - Manager",
+                        "type": "HTTP_AGENT",
+                        "key": "node.service.status.manager",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/<cluster-node-id>/node/services/manager/status\nRead manager service status\nEnum: running, stopped",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.monitor_runtime_state"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/{HOST.HOST}/node/services/manager/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "5537582b5b694c4e9d24f36f5e74f633",
+                                "expression": "not(last(/Template NSX Management Nodes/node.service.status.manager)=\"running\")",
+                                "name": "Service Status - Manager is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "992241d0e42a45deb329f6292419c1da",
+                        "name": "Service Status - Messaging Manager",
+                        "type": "HTTP_AGENT",
+                        "key": "node.service.status.msgmanager",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/<cluster-node-id>/node/services/messaging-manager/status\nRead messaging manager service status\nEnum: running, stopped",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.monitor_runtime_state"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/{HOST.HOST}/node/services/messaging-manager/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "2859d257d5c64eceaccea798a1db942c",
+                                "expression": "not(last(/Template NSX Management Nodes/node.service.status.msgmanager)=\"running\")",
+                                "name": "Service Status - Messaging Manager is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "debe746637654f2abdf4dfc3bb7da68f",
+                        "name": "Service Status - Policy",
+                        "type": "HTTP_AGENT",
+                        "key": "node.service.status.policy",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/<cluster-node-id>/node/services/policy/status\nRead policy service status\nEnum: running, stopped",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.monitor_runtime_state"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/{HOST.HOST}/node/services/policy/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "3e50979e8e3a49cebf2a9e9edfff17c5",
+                                "expression": "not(last(/Template NSX Management Nodes/node.service.status.policy)=\"running\")",
+                                "name": "Service Status - Policy is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "158fd0c80037494d98b6b398402a9002",
+                        "name": "Node Status Master item",
+                        "type": "HTTP_AGENT",
+                        "key": "node.status.master.item",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/nodes/<node-id>/status\nRead aggregated runtime status of cluster node.",
+                        "timeout": "15s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/nodes/{HOST.HOST}/status",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}"
+                    },
+                    {
+                        "uuid": "d3ca21a424b74aebb0db5f0eb782576d",
+                        "name": "Uptime",
+                        "type": "DEPENDENT",
+                        "key": "node.uptime",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "units": "uptime",
+                        "description": "Milliseconds since system start",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.system_status.uptime"
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.001"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "system"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "83686741388c42a0a11b910d542c4998",
+                                "expression": "last(/Template NSX Management Nodes/node.uptime)<last(/Template NSX Management Nodes/node.uptime,#2)",
+                                "name": "Node has been restarted",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "uuid": "294976e62e05492ea4335d6332716a33",
+                        "name": "Discover Node Filesystem",
+                        "type": "HTTP_AGENT",
+                        "key": "custom.discovery",
+                        "delay": "1h",
+                        "item_prototypes": [
+                            {
+                                "uuid": "2df57cf6cc014e8d8d734a618a44048a",
+                                "name": "Free Disk Space on {#FS.NAME} (percentage)",
+                                "type": "CALCULATED",
+                                "key": "node.disk.space.pfree.[\"{#FS.NAME}\"]",
+                                "delay": "{$ITEM.INTERVAL.SHORT}",
+                                "history": "{$ITEM.HISTORY}",
+                                "trends": "{$ITEM.TREND}",
+                                "value_type": "FLOAT",
+                                "units": "%",
+                                "params": "100-((last(//node.disk.space.used.[\"{#FS.NAME}\"])/last(//node.disk.space.total.[\"{#FS.NAME}\"]))*100)",
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "filesystem"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "ea9a29a40caa479fac1895092244fed8",
+                                        "expression": "last(/Template NSX Management Nodes/node.disk.space.pfree.[\"{#FS.NAME}\"])<5",
+                                        "name": "Free Disk Space on {#FS.NAME} < 5%",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "5062d1354cbe46469be3adbbaf18bf03",
+                                "name": "Total Disk Space on {#FS.NAME}",
+                                "type": "DEPENDENT",
+                                "key": "node.disk.space.total.[\"{#FS.NAME}\"]",
+                                "delay": "0",
+                                "history": "{$ITEM.HISTORY}",
+                                "trends": "{$ITEM.TREND}",
+                                "units": "B",
+                                "description": "{#FS.NAME} File system size in kilobytes",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.body.system_status.file_systems[?(@.mount==\"{#FS.NAME}\")].total"
+                                        ]
+                                    },
+                                    {
+                                        "type": "TRIM",
+                                        "parameters": [
+                                            "\"[]\""
+                                        ]
+                                    },
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1024"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.status.master.item"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "filesystem"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "18da56c69f254a42a7adf4926f1021b1",
+                                "name": "Used Disk Space on {#FS.NAME}",
+                                "type": "DEPENDENT",
+                                "key": "node.disk.space.used.[\"{#FS.NAME}\"]",
+                                "delay": "0",
+                                "history": "{$ITEM.HISTORY}",
+                                "trends": "{$ITEM.TREND}",
+                                "units": "B",
+                                "description": "{#FS.NAME} File system size in kilobytes",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.body.system_status.file_systems[?(@.mount==\"{#FS.NAME}\")].used"
+                                        ]
+                                    },
+                                    {
+                                        "type": "TRIM",
+                                        "parameters": [
+                                            "\"[]\""
+                                        ]
+                                    },
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1024"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.status.master.item"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "filesystem"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/cluster/nodes/{HOST.HOST}/status",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var array = (JSON.parse(value)).system_status.file_systems;\nvar len = Object.keys(array).length;\nvar obj = []\nvar output = \"{\\\"data\\\":[\"; \nfor(var i=0; i<len;i++){\n  // console.log(array[i].file_system);\n  var a = \"{\\\"{#FS.NAME}\\\": \\\"\" + array[i].mount + \"\\\"}\";\n  obj.push(a);\n}\noutput += obj;\noutput += \"]}\";\nreturn output"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "uuid": "a286d05c665d46b8a2df06b492f53b0a",
+                "name": "Memory Usage",
+                "graph_items": [
+                    {
+                        "sortorder": "1",
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Template NSX Management Nodes",
+                            "key": "node.memory.total"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "F63100",
+                        "item": {
+                            "host": "Template NSX Management Nodes",
+                            "key": "node.memory.free"
+                        }
+                    },
+                    {
+                        "sortorder": "3",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Template NSX Management Nodes",
+                            "key": "node.memory.pfree"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

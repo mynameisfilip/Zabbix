@@ -1,0 +1,1019 @@
+{
+    "zabbix_export": {
+        "version": "6.0",
+        "date": "2025-01-17T15:12:51Z",
+        "groups": [
+            {
+                "uuid": "d1a86d4a9ad545ce98deaa658aeeaac0",
+                "name": "Templates"
+            }
+        ],
+        "templates": [
+            {
+                "uuid": "17306c088f194675851c7a9d0cad6c49",
+                "template": "Template NSX Edge Transport Nodes",
+                "name": "Template NSX Edge Transport Nodes",
+                "description": "Template to be linked to NSX transport edge nodes.",
+                "templates": [
+                    {
+                        "name": "Template NSX Macros"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates"
+                    }
+                ],
+                "items": [
+                    {
+                        "uuid": "430562bf635d46ebb10c00cd18b7875d",
+                        "name": "CPU Load avg 1 min",
+                        "type": "DEPENDENT",
+                        "key": "node.cpu.load.avg1",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "description": "One minute average system cpu load.",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.node_status.system_status.load_average[0]"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "cpu"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "e212035a40044ea9a277064fa8ae339e",
+                        "name": "CPU Load avg 5 min",
+                        "type": "DEPENDENT",
+                        "key": "node.cpu.load.avg5",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "description": "Five minute average system cpu load.",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.node_status.system_status.load_average[1]"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "cpu"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "52a5f2306b644ab4a7d2d1801be6e501",
+                                "expression": "last(/Template NSX Edge Transport Nodes/node.cpu.load.avg5)>5",
+                                "name": "CPU Load avg 5 min > 10",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "d6df25e7aad14cf284676ddea83342a5",
+                        "name": "CPU Load avg 15 min",
+                        "type": "DEPENDENT",
+                        "key": "node.cpu.load.avg15",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "description": "Fifeteen minute average system cpu load.",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.node_status.system_status.load_average[2]"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "cpu"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "7f30c72edd1643dab522b4424b663897",
+                        "name": "CPU Util Datapath",
+                        "type": "DEPENDENT",
+                        "key": "node.cpu.util.dpdk.avg",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "description": "CPU cores that handle fast path packet processing using DPDK",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.node_status.system_status.cpu_usage.avg_cpu_core_usage_dpdk"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "cpu"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "330a363aff2c47219c523a2960c3ed56",
+                        "name": "CPU Util Services",
+                        "type": "DEPENDENT",
+                        "key": "node.cpu.util.nondpdk.avg",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "description": "CPU cores that handle system and layer-7 related processing",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.node_status.system_status.cpu_usage.avg_cpu_core_usage_non_dpdk"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "cpu"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "b6e66303dcc64ee9b24d548053fcfdb3",
+                        "name": "CPU Util Total",
+                        "type": "CALCULATED",
+                        "key": "node.cpu.util.total",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "params": "last(//node.cpu.util.dpdk.avg)+last(//node.cpu.util.nondpdk.avg)",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "cpu"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "55bda78fac9b4a429f81f47a23815957",
+                                "expression": "avg(/Template NSX Edge Transport Nodes/node.cpu.util.total,15m)>95",
+                                "name": "CPU util > 95% for 15min",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "9e4d187b83e9475bbac37db0fb0eed73",
+                        "name": "Memory Free",
+                        "type": "CALCULATED",
+                        "key": "node.memory.free",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "units": "B",
+                        "params": "last(//node.memory.total)-last(//node.memory.used)",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "memory"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "8a3a08f75b4e43988d02d06f28450dca",
+                        "name": "Memory Free (percentage)",
+                        "type": "CALCULATED",
+                        "key": "node.memory.pfree",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "value_type": "FLOAT",
+                        "units": "%",
+                        "params": "100-(last(//node.memory.used)/last(//node.memory.total)*100)",
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "memory"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "c513e7d0922748dba34274eff28cb343",
+                        "name": "Memory Total",
+                        "type": "DEPENDENT",
+                        "key": "node.memory.total",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "units": "B",
+                        "description": "Amount of RAM allocated to the system, in kilobytes",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.node_status.system_status.mem_total"
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "memory"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "828d8dd824dd4388afcde091e772e285",
+                        "name": "Memory Used",
+                        "type": "DEPENDENT",
+                        "key": "node.memory.used",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "units": "B",
+                        "description": "Amount of RAM in use on the system, in kilobytes",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.node_status.system_status.mem_used"
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "1024"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "memory"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "a5effefe1d2d459e98ba99491c5bbb1a",
+                        "name": "Edge Node Status",
+                        "type": "DEPENDENT",
+                        "key": "node.status",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Enum: UP, DOWN, DEGRADED, UNKNOWN",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.status"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "system"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "380f4f0a2e6c4c5fbeedcf8da7329a81",
+                                "expression": "not(last(/Template NSX Edge Transport Nodes/node.status)=\"UP\")",
+                                "name": "Edge Node Status is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "4740181edea441709aa05f2e45fa9b23",
+                        "name": "Node Status Master item",
+                        "type": "HTTP_AGENT",
+                        "key": "node.status.master.item",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Read status of a transport node\nhttps://<nsx-mgr>/api/v1/transport-nodes/<node-id>/status",
+                        "timeout": "15s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/transport-nodes/{HOST.HOST}/status",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}"
+                    },
+                    {
+                        "uuid": "f1be6c263e6745fa88bf42fc997aca1c",
+                        "name": "Uptime",
+                        "type": "DEPENDENT",
+                        "key": "node.uptime",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY}",
+                        "trends": "{$ITEM.TREND}",
+                        "units": "uptime",
+                        "description": "Milliseconds since system start",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.node_status.system_status.uptime"
+                                ]
+                            },
+                            {
+                                "type": "MULTIPLIER",
+                                "parameters": [
+                                    "0.001"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "node.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "system"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "b63c43782d8a431abf7f3495c80e2162",
+                                "expression": "last(/Template NSX Edge Transport Nodes/node.uptime)<last(/Template NSX Edge Transport Nodes/node.uptime,#2)",
+                                "name": "Node has been restarted",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "uuid": "c6fe090611f44fa893d52c574d6f6559",
+                        "name": "Discover Node Filesystem",
+                        "type": "HTTP_AGENT",
+                        "key": "custom.discovery",
+                        "delay": "1h",
+                        "item_prototypes": [
+                            {
+                                "uuid": "fe3badcf8b204d25999fd58bc2f926fb",
+                                "name": "Free Disk Space on {#FS.NAME} (percentage)",
+                                "type": "CALCULATED",
+                                "key": "node.disk.space.pfree.[\"{#FS.NAME}\"]",
+                                "delay": "{$ITEM.INTERVAL.SHORT}",
+                                "history": "{$ITEM.HISTORY}",
+                                "trends": "{$ITEM.TREND}",
+                                "value_type": "FLOAT",
+                                "units": "%",
+                                "params": "100-((last(//node.disk.space.used.[\"{#FS.NAME}\"])/last(//node.disk.space.total.[\"{#FS.NAME}\"]))*100)",
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "filesystem"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "bc4e78e6b01c4f528b6b50388386ace0",
+                                        "expression": "last(/Template NSX Edge Transport Nodes/node.disk.space.pfree.[\"{#FS.NAME}\"])<5",
+                                        "name": "Free Disk Space on {#FS.NAME} < 5%",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "e1b6d1df1443481ea6222e5a0e3806f9",
+                                "name": "Total Disk Space on {#FS.NAME}",
+                                "type": "DEPENDENT",
+                                "key": "node.disk.space.total.[\"{#FS.NAME}\"]",
+                                "delay": "0",
+                                "history": "{$ITEM.HISTORY}",
+                                "trends": "{$ITEM.TREND}",
+                                "units": "B",
+                                "description": "{#FS.NAME} File system size in kilobytes",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.node_status.system_status.file_systems[?(@.mount==\"{#FS.NAME}\")].total"
+                                        ]
+                                    },
+                                    {
+                                        "type": "TRIM",
+                                        "parameters": [
+                                            "\"[]\""
+                                        ]
+                                    },
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1024"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.status.master.item"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "filesystem"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "499de27fa1864b2093b51c0bf477e648",
+                                "name": "Used Disk Space on {#FS.NAME}",
+                                "type": "DEPENDENT",
+                                "key": "node.disk.space.used.[\"{#FS.NAME}\"]",
+                                "delay": "0",
+                                "history": "{$ITEM.HISTORY}",
+                                "trends": "{$ITEM.TREND}",
+                                "units": "B",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.node_status.system_status.file_systems[?(@.mount==\"{#FS.NAME}\")].used"
+                                        ]
+                                    },
+                                    {
+                                        "type": "TRIM",
+                                        "parameters": [
+                                            "\"[]\""
+                                        ]
+                                    },
+                                    {
+                                        "type": "MULTIPLIER",
+                                        "parameters": [
+                                            "1024"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.status.master.item"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "filesystem"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/transport-nodes/{HOST.HOST}/status",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var array = (JSON.parse(value)).node_status.system_status.file_systems;\nvar len = Object.keys(array).length;\nvar obj = []\nvar output = \"{\\\"data\\\":[\"; \nfor(var i=0; i<len;i++){\n  var a = \"{\\\"{#FS.NAME}\\\": \\\"\" + array[i].mount + \"\\\"}\";\n  obj.push(a);\n}\noutput += obj;\noutput += \"]}\";\nreturn output"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "d91f052e22e742999f4d7b1f6b8f3dd6",
+                        "name": "Discover Node Interfaces",
+                        "type": "HTTP_AGENT",
+                        "key": "custom.discovery.interfaces",
+                        "delay": "1h",
+                        "item_prototypes": [
+                            {
+                                "uuid": "0bd6c73dd5da4140a9e9b9dbcac31d21",
+                                "name": "Interface {#INTERFACE} Admin Status",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.admin.status.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "60d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Interface administration status (shut / no shut)\nEnum: UP, DOWN",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.admin_status"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "3600"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "94dc2e8ba3de49ff81a6f3f8e026061d",
+                                        "expression": "last(/Template NSX Edge Transport Nodes/node.interface.admin.status.[\"{#INTERFACE}\"])=\"DOWN\"",
+                                        "name": "Interface {#INTERFACE} Admin Status is DOWN",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "7714418d116c43f8969e5b090e06bfc7",
+                                "name": "Interface {#INTERFACE} Link Status",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.link.status.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "60d",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "Interface link status (interface is connected/disconnected)\nEnum: UP, DOWN",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.link_status"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "3600"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "f2d12875352048ac92e3a05c6a864c8a",
+                                        "expression": "last(/Template NSX Edge Transport Nodes/node.interface.link.status.[\"{#INTERFACE}\"])=\"DOWN\"",
+                                        "name": "Interface {#INTERFACE} Link Status is DOWN",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "ac456f60987e4cdfa529202ca9209141",
+                                "name": "Interface {#INTERFACE} master item",
+                                "type": "HTTP_AGENT",
+                                "key": "node.interface.master.item.[\"{#INTERFACE}\"]",
+                                "delay": "10m",
+                                "history": "0",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "https://<nsx-mgr>/api/v1/transport-nodes/<node-id>/network/interfaces/<interface-id>",
+                                "timeout": "5s",
+                                "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/transport-nodes/{HOST.HOST}/network/interfaces/{#INTERFACE}",
+                                "ssl_cert_file": "{$SSL.CERT.FILE}",
+                                "ssl_key_file": "{$SSL.KEY.FILE}"
+                            },
+                            {
+                                "uuid": "e07bc51282cc43a7a78894aa17b5879b",
+                                "name": "Interface {#INTERFACE} received bytes",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.rx.bytes.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "10d",
+                                "description": "Number of bytes received",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.rx_bytes"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.stats.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "4cbbe0cfe1d54a0390a582fc69b98d35",
+                                "name": "Interface {#INTERFACE} received packets dropped %",
+                                "type": "CALCULATED",
+                                "key": "node.interface.rx.dropped.percentage.[\"{#INTERFACE}\"]",
+                                "delay": "10m",
+                                "history": "10d",
+                                "value_type": "FLOAT",
+                                "units": "%",
+                                "params": "(last(//node.interface.rx.dropped.[\"{#INTERFACE}\"]) / last(//node.interface.rx.packets.[\"{#INTERFACE}\"]))*100",
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "d7c4624f7fff4ec8a4867fdb4d2e5caa",
+                                        "expression": "last(/Template NSX Edge Transport Nodes/node.interface.rx.dropped.percentage.[\"{#INTERFACE}\"])>5",
+                                        "name": "Interface {#INTERFACE} received packets drop > 5%",
+                                        "priority": "WARNING"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "78ff34f145874885a38b2900f046a411",
+                                "name": "Interface {#INTERFACE} received packets dropped",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.rx.dropped.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "10d",
+                                "description": "Number of packets dropped",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.rx_dropped"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.stats.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "de3aa57cf90f434cb7e76c469e926804",
+                                "name": "Interface {#INTERFACE} received errors",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.rx.errors.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "10d",
+                                "description": "Number of receive errors",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.rx_errors"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.stats.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "994e1f9e95e9486a96c5999a81be5ab5",
+                                "name": "Interface {#INTERFACE} received packets",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.rx.packets.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "10d",
+                                "description": "Number of packets received",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.rx_packets"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.stats.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "63d418fd88e340c2b5b36c277f287841",
+                                "name": "Interface {#INTERFACE} stats master item",
+                                "type": "HTTP_AGENT",
+                                "key": "node.interface.stats.master.item.[\"{#INTERFACE}\"]",
+                                "delay": "10m",
+                                "history": "0",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "description": "https://<nsx-mgr>/api/v1/transport-nodes/<node-id>/network/interfaces/<interface-id>/stats",
+                                "timeout": "5s",
+                                "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/transport-nodes/{HOST.HOST}/network/interfaces/{#INTERFACE}/stats",
+                                "ssl_cert_file": "{$SSL.CERT.FILE}",
+                                "ssl_key_file": "{$SSL.KEY.FILE}"
+                            },
+                            {
+                                "uuid": "d0ddcb4aef6949da8c0cd15b36548316",
+                                "name": "Interface {#INTERFACE} transmitted bytes",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.tx.bytes.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "10d",
+                                "description": "Number of bytes transmitted",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.tx_bytes"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.stats.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "cd5c752808904c709b806793aa9ed575",
+                                "name": "Interface {#INTERFACE} transmit packets dropped %",
+                                "type": "CALCULATED",
+                                "key": "node.interface.tx.dropped.percentage.[\"{#INTERFACE}\"]",
+                                "delay": "10m",
+                                "history": "10d",
+                                "value_type": "FLOAT",
+                                "units": "%",
+                                "params": "(last(//node.interface.tx.dropped.[\"{#INTERFACE}\"]) / last(//node.interface.tx.packets.[\"{#INTERFACE}\"]))*100",
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ],
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "7f56e3fb738b4c7c8db7ab17ffb50471",
+                                        "expression": "last(/Template NSX Edge Transport Nodes/node.interface.tx.dropped.percentage.[\"{#INTERFACE}\"])>5",
+                                        "name": "Interface {#INTERFACE} transmit packets drop > 5%",
+                                        "priority": "WARNING",
+                                        "description": "Transmitted packets are getting dropped on NSX-T Host Node's network interface. This may impact the network traffic on ESXi Host."
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "bfaf124a54564ee6910e3762e85f116e",
+                                "name": "Interface {#INTERFACE} transmit packets dropped",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.tx.dropped.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "10d",
+                                "description": "Number of packets dropped",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.tx_dropped"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.stats.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "89385f5c3ef0491b8ceb53ed4e6b882b",
+                                "name": "Interface {#INTERFACE} transmit errors",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.tx.errors.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "10d",
+                                "description": "Number of transmit errors",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.tx_errors"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.stats.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ]
+                            },
+                            {
+                                "uuid": "6ae8e3d8acfd4af8be8d5f0774fcc6cb",
+                                "name": "Interface {#INTERFACE} transmitted packets",
+                                "type": "DEPENDENT",
+                                "key": "node.interface.tx.packets.[\"{#INTERFACE}\"]",
+                                "delay": "0",
+                                "history": "10d",
+                                "description": "Number of packets transmitted",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.tx_packets"
+                                        ]
+                                    }
+                                ],
+                                "master_item": {
+                                    "key": "node.interface.stats.master.item.[\"{#INTERFACE}\"]"
+                                },
+                                "tags": [
+                                    {
+                                        "tag": "Application",
+                                        "value": "network stats"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{$NSX.MANAGER}.{$DOMAIN.NAME}/api/v1/transport-nodes/{HOST.HOST}/network/interfaces",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var array = (JSON.parse(value)).results;\nvar len = Object.keys(array).length;\nvar obj = []\nvar output = \"{\\\"data\\\":[\"; \nfor(var i=0; i<len;i++){\n  var a = \"{\\\"{#INTERFACE}\\\": \\\"\" + array[i].interface_id + \"\\\"}\";\n  obj.push(a);\n}\noutput += obj;\noutput += \"]}\";\nreturn output"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "uuid": "b4cb3e5d11d24bc8aa6e307f5f2b6da8",
+                "name": "CPU Util Total",
+                "type": "STACKED",
+                "ymin_type_1": "FIXED",
+                "ymax_type_1": "FIXED",
+                "graph_items": [
+                    {
+                        "sortorder": "1",
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Template NSX Edge Transport Nodes",
+                            "key": "node.cpu.util.dpdk.avg"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "F63100",
+                        "item": {
+                            "host": "Template NSX Edge Transport Nodes",
+                            "key": "node.cpu.util.nondpdk.avg"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "23f008846477424e98edc356bfc2a6b7",
+                "name": "Memory Usage",
+                "graph_items": [
+                    {
+                        "sortorder": "1",
+                        "color": "1A7C11",
+                        "item": {
+                            "host": "Template NSX Edge Transport Nodes",
+                            "key": "node.memory.total"
+                        }
+                    },
+                    {
+                        "sortorder": "2",
+                        "color": "F63100",
+                        "item": {
+                            "host": "Template NSX Edge Transport Nodes",
+                            "key": "node.memory.free"
+                        }
+                    },
+                    {
+                        "sortorder": "3",
+                        "color": "2774A4",
+                        "item": {
+                            "host": "Template NSX Edge Transport Nodes",
+                            "key": "node.memory.pfree"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

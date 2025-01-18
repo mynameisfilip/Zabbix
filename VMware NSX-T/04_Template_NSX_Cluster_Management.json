@@ -1,0 +1,1033 @@
+{
+    "zabbix_export": {
+        "version": "6.0",
+        "date": "2025-01-17T15:13:11Z",
+        "groups": [
+            {
+                "uuid": "e7446ea54447411ca99db9a846454549",
+                "name": "NSX Edge Transport Nodes"
+            },
+            {
+                "uuid": "c108f06f89db490e828accc241027453",
+                "name": "NSX Management Nodes"
+            },
+            {
+                "uuid": "d1a86d4a9ad545ce98deaa658aeeaac0",
+                "name": "Templates"
+            }
+        ],
+        "templates": [
+            {
+                "uuid": "d10a3e53f7a1402eaa630889f688cf66",
+                "template": "Template NSX Cluster Management",
+                "name": "Template NSX Cluster Management",
+                "description": "Template to be linked to VIP or Hostname of NSX Management Cluster",
+                "templates": [
+                    {
+                        "name": "Template NSX Macros"
+                    }
+                ],
+                "groups": [
+                    {
+                        "name": "Templates"
+                    }
+                ],
+                "items": [
+                    {
+                        "uuid": "8fbfeb4d15654d43a0323c6bb9b4df48",
+                        "name": "Control Cluster Status",
+                        "type": "DEPENDENT",
+                        "key": "cluster.control.status",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "The current status of the controller cluster\nEnum: NO_CONTROLLERS, UNSTABLE, DEGRADED, STABLE, UNKNOWN",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.control_cluster_status.status"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "ca7bb03553244a33899f7af83343b2da",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.control.status)=\"STABLE\")",
+                                "name": "Control Cluster status is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "3455ac99cfe14d2dbb425e9152b6fe0d",
+                        "name": "Detailed Cluster Status",
+                        "type": "DEPENDENT",
+                        "key": "cluster.detailed.status",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Status of all the cluster groups\nEnum: STABLE, DEGRADED, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.overall_status"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "1ba1b477f831406680664c6fff309c4c",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.detailed.status)=\"STABLE\")",
+                                "name": "Detailed Cluster status is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "590faf14ebe740b2bf7752ce31b75977",
+                        "name": "Cluster Group Status - Async Replicator",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.asyncreplicator",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "status": "DISABLED",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='ASYNC_REPLICATOR')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "d0b35bf3268f4b9bbe7868cfa25c106a",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.asyncreplicator)=\"STABLE\")",
+                                "name": "Service Group - Async Replicator is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "b7262945074146f0b2b55d8fcd61560c",
+                        "name": "Cluster Group Status - Cluster Boot Manager",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.clusterbootmanager",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='CLUSTER_BOOT_MANAGER')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "7db257a10ab1462ea3971eb7222fcf24",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.clusterbootmanager)=\"STABLE\")",
+                                "name": "Service Group - Cluster Boot Manager is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "3bef495f8be5490498a4dccad5d09e7c",
+                        "name": "Cluster Group Status - CM Inventory",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.cminventory",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='CM-INVENTORY')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "33c0bce9875d49d99898a6192916cf52",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.cminventory)=\"STABLE\")",
+                                "name": "Service Group - CM-Inventory is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "9b94c69742364084a2605ab3ffa3f877",
+                        "name": "Cluster Group Status - Controller",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.controller",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='CONTROLLER')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "07c98f825a164006b092cf668c665388",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.controller)=\"STABLE\")",
+                                "name": "Service Group - Controller is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "3580342e81704eb883502634462317c2",
+                        "name": "Cluster Group Status - Corfu Nonconfig",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.corfunonconfig",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='CORFU_NONCONFIG')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "88b11b3fa22d4454b300984babd274cb",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.corfunonconfig)=\"STABLE\")",
+                                "name": "Service Group - Corfu Nonconfig is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "36bacbcc310f44269805ae81bd654a33",
+                        "name": "Cluster Group Status - Datastore",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.datastore",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='DATASTORE')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "b9d96bf66ffd45b6869f098a87efd4c2",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.datastore)=\"STABLE\")",
+                                "name": "Service Group - Datastore is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "b99334b6e91e449db1157788c812ab18",
+                        "name": "Cluster Group Status - Global Manager",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.globalmanager",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "status": "DISABLED",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='GLOBAL_MANAGER')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "ddd83616af5f4b83a6468bb8be3ff795",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.globalmanager)=\"STABLE\")",
+                                "name": "Service Group - Global Manager is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "f34f65057f5443abaa6a9a904964e9c1",
+                        "name": "Cluster Group Status - HTTPS",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.https",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='HTTPS')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "a6f49677b33744b7ac5c9d498696efed",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.https)=\"STABLE\")",
+                                "name": "Service Group - HTTPS is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "8f15d12939524ef4b9c30d5b29d2bd07",
+                        "name": "Cluster Group Status - IDPS Reporting",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.idpsreporting",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='IDPS_REPORTING')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "a8d3edb2bd9b4fbc9b4e317fde88df04",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.idpsreporting)=\"STABLE\")",
+                                "name": "Service Group - IDPS Reporting is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "ea84825b839841aa8fdf505f652d7024",
+                        "name": "Cluster Group Status - Manager",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.manager",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='MANAGER')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "9654942339ce4da091df39df8b6746f1",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.manager)=\"STABLE\")",
+                                "name": "Service Group - Manager is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "cb31bbc3b2ed45f6b9aff1ee4575db66",
+                        "name": "Cluster Group Status - Monitoring",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.monitoring",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='MONITORING')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "6801c733518a4e1496f7de0d1c6c379f",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.monitoring)=\"STABLE\")",
+                                "name": "Service Group - Monitoring is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "98d0177705f3425ca61c32007f04d086",
+                        "name": "Cluster Group Status - Messaging Manager",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.msgmanager",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='MESSAGING-MANAGER')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "7e0e6f70b10942a3b33a0318f7ecbccc",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.msgmanager)=\"STABLE\")",
+                                "name": "Service Group - Messaging Manager is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "4ceb01fb32414d0691dc29165bd8701e",
+                        "name": "Cluster Group Status - Policy",
+                        "type": "DEPENDENT",
+                        "key": "cluster.group.status.policy",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "status": "DISABLED",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.detailed_cluster_status.groups[?(@.group_type=='POLICY')].group_status"
+                                ]
+                            },
+                            {
+                                "type": "TRIM",
+                                "parameters": [
+                                    "[\"]"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "522ddab69ca94367aa5d4398b9cb1da9",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.group.status.policy)=\"STABLE\")",
+                                "name": "Service Group - Policy is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "c92e97e3949e4ff0a8f3825b3a402748",
+                        "name": "MGMT Cluster Status",
+                        "type": "DEPENDENT",
+                        "key": "cluster.mgmt.status",
+                        "delay": "0",
+                        "history": "{$ITEM.HISTORY.LONG}",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Group status\nEnum: STABLE, DEGRADED, UNSTABLE, UNAVAILABLE",
+                        "preprocessing": [
+                            {
+                                "type": "JSONPATH",
+                                "parameters": [
+                                    "$.body.mgmt_cluster_status.status"
+                                ]
+                            },
+                            {
+                                "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                "parameters": [
+                                    "3600"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "cluster.status.master.item"
+                        },
+                        "tags": [
+                            {
+                                "tag": "Application",
+                                "value": "services"
+                            }
+                        ],
+                        "triggers": [
+                            {
+                                "uuid": "c07b6ccc9761459cb589971bb15aeecc",
+                                "expression": "not(last(/Template NSX Cluster Management/cluster.mgmt.status)=\"STABLE\")",
+                                "name": "MGMT Cluster status is {ITEM.VALUE1}",
+                                "priority": "WARNING"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "ade209dc93fd4419b78662ac8059b667",
+                        "name": "Cluster Status Master Item",
+                        "type": "HTTP_AGENT",
+                        "key": "cluster.status.master.item",
+                        "delay": "{$ITEM.INTERVAL.SHORT}",
+                        "history": "1h",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "https://<nsx-mgr>/api/v1/cluster/status\nReturns status information for the NSX cluster control role and management\nrole.",
+                        "timeout": "15s",
+                        "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/api/v1/cluster/status",
+                        "status_codes": "",
+                        "output_format": "JSON",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}"
+                    }
+                ],
+                "discovery_rules": [
+                    {
+                        "uuid": "511ed3a8edfd4e16b1cb6972fb5f31ac",
+                        "name": "Discover Compute Managers",
+                        "type": "HTTP_AGENT",
+                        "key": "discover.compute.managers",
+                        "delay": "1d",
+                        "item_prototypes": [
+                            {
+                                "uuid": "61df820953b04d9783b3ae9975557cba",
+                                "name": "Compute Manager {#COMPUTE.MANAGER.NAME} Status",
+                                "type": "HTTP_AGENT",
+                                "key": "compute.manager.status.[{#COMPUTE.MANAGER.NAME}]",
+                                "delay": "{$ITEM.INTERVAL.SHORT}",
+                                "history": "{$ITEM.HISTORY.LONG}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.connection_status"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "3600"
+                                        ]
+                                    }
+                                ],
+                                "timeout": "5s",
+                                "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/api/v1/fabric/compute-managers/{#COMPUTE.MANAGER.ID}/status",
+                                "posts": "Readonly\nEnum: UP, DOWN, CONNECTING",
+                                "ssl_cert_file": "{$SSL.CERT.FILE}",
+                                "ssl_key_file": "{$SSL.KEY.FILE}",
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "8737b8b5ee8a4d059a74138429cac1f8",
+                                        "expression": "last(/Template NSX Cluster Management/compute.manager.status.[{#COMPUTE.MANAGER.NAME}])<>\"UP\"",
+                                        "name": "Compute Manager {#COMPUTE.MANAGER.NAME} Status is {ITEM.VALUE1}",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/api/v1/fabric/compute-managers",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var array = (JSON.parse(value)).results;\nvar len = Object.keys(array).length;\nvar obj = []\nvar output = \"{\\\"data\\\":[\"; \nfor(var i=0; i<len;i++){\n    var a = \"{\\\"{#COMPUTE.MANAGER.ID}\\\": \\\"\" + array[i].id + \"\\\",\";\n    var b = \"\\\"{#COMPUTE.MANAGER.NAME}\\\": \\\"\" + array[i].display_name + \"\\\"}\";\n  obj.push(a+b);\n}\noutput += obj;\noutput += \"]}\";\nreturn output"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "86efa9e3cd3c4e818e417fb06d23a238",
+                        "name": "Discover Edge Clusters",
+                        "type": "HTTP_AGENT",
+                        "key": "discover.edge.clusters",
+                        "delay": "1d",
+                        "item_prototypes": [
+                            {
+                                "uuid": "97fc8f5c3a9f417da5101b32add51339",
+                                "name": "Edge Cluster {#EDGE.CLUSTER.NAME} Status",
+                                "type": "HTTP_AGENT",
+                                "key": "edge.cluster.status.[{#EDGE.CLUSTER.NAME}]",
+                                "delay": "{$ITEM.INTERVAL.SHORT}",
+                                "history": "{$ITEM.HISTORY.LONG}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.edge_cluster_status"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "3600"
+                                        ]
+                                    }
+                                ],
+                                "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/api/v1/edge-clusters/{#EDGE.CLUSTER.ID}/status?source=realtime",
+                                "posts": "Status of an edge cluster.\nEnum: UP, DOWN, DEGRADED, UNKNOWN",
+                                "ssl_cert_file": "{$SSL.CERT.FILE}",
+                                "ssl_key_file": "{$SSL.KEY.FILE}",
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "a05da01c586b4775bcc6d721705c80ff",
+                                        "expression": "last(/Template NSX Cluster Management/edge.cluster.status.[{#EDGE.CLUSTER.NAME}])<>\"UP\"",
+                                        "name": "Edge Cluster {#EDGE.CLUSTER.NAME} Status is {ITEM.VALUE1}",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/api/v1/edge-clusters",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var array = JSON.parse(value);\nvar clusters = array.results;\nvar lenClusters = Object.keys(clusters).length;\nvar obj = [];\nvar output = \"{\\\"data\\\":[\";\n\nfor(var i=0; i<lenClusters; i++){\n\n    var edgeClusterName = \"{\\\"{#EDGE.CLUSTER.NAME}\\\": \\\"\" + clusters[i].display_name + \"\\\",\";\n    var edgeClusterID = \"\\\"{#EDGE.CLUSTER.ID}\\\": \\\"\" + clusters[i].id + \"\\\"}\";\n    obj.push(edgeClusterName+edgeClusterID)\n}\noutput += obj;\noutput += \"]}\"\nreturn output"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "c1f0a66c120f4a84b9fe9a32e62b86b2",
+                        "name": "Discover Edge Transport Nodes",
+                        "type": "HTTP_AGENT",
+                        "key": "discover.edge.nodes",
+                        "delay": "1d",
+                        "host_prototypes": [
+                            {
+                                "uuid": "668a0d4c0b934141856bf2d2ae8983a9",
+                                "host": "{#NODE.ID}",
+                                "name": "{#NODE.NAME}",
+                                "group_links": [
+                                    {
+                                        "group": {
+                                            "name": "NSX Edge Transport Nodes"
+                                        }
+                                    }
+                                ],
+                                "templates": [
+                                    {
+                                        "name": "Template NSX Edge Transport Nodes"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/api/v1/edge-clusters",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var array = JSON.parse(value);\nvar clusters = array.results;\nvar lenClusters = Object.keys(clusters).length;\nvar obj = [];\nvar output = \"{\\\"data\\\":[\";\n\nfor(var i=0; i<lenClusters; i++){\n    var lenNodes = Object.keys(clusters[i].members).length;\n\n    for(var j=0; j<lenNodes;j++){\n        var a = \"{\\\"{#NODE.NAME}\\\": \\\"\" + clusters[i].members[j].display_name + \"\\\",\";\n        var b = \"\\\"{#NODE.ID}\\\": \\\"\" + clusters[i].members[j].transport_node_id + \"\\\"}\";\n        obj.push((a+b));\n    }\n}\noutput += obj;\noutput += \"]}\"\nreturn output"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "5b04cf874bce4d41b30b3daf3700f65f",
+                        "name": "Discover Manager Nodes",
+                        "type": "HTTP_AGENT",
+                        "key": "discover.manager.nodes",
+                        "delay": "1d",
+                        "filter": {
+                            "conditions": [
+                                {
+                                    "macro": "{#NODE.NAME}",
+                                    "value": "{HOST.NAME}",
+                                    "operator": "NOT_MATCHES_REGEX",
+                                    "formulaid": "A"
+                                }
+                            ]
+                        },
+                        "host_prototypes": [
+                            {
+                                "uuid": "5c3a7cb773f845cbb3eb7bf177f6d34d",
+                                "host": "{#NODE.ID}",
+                                "name": "{#NODE.NAME}",
+                                "group_links": [
+                                    {
+                                        "group": {
+                                            "name": "NSX Management Nodes"
+                                        }
+                                    }
+                                ],
+                                "templates": [
+                                    {
+                                        "name": "Template NSX Management Nodes"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/api/v1/cluster",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var array = JSON.parse(value)\nvar nodes = array.nodes;\nvar len = Object.keys(nodes).length;\nvar obj = [];\nvar output = \"{\\\"data\\\":[\"\nfor(var i = 0; i<len; i++){\n  var a = \"{\\\"{#NODE.NAME}\\\": \\\"\" + nodes[i].fqdn + \"\\\",\";\n  var b = \"\\\"{#NODE.ID}\\\": \\\"\" + nodes[i].node_uuid + \"\\\"}\";\n  obj.push((a+b));\n}\noutput += obj;\noutput += \"]}\"\nreturn output"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "9d8ae71feeea417e91fa5f59dd86972e",
+                        "name": "Discover Tier0 Gateways",
+                        "type": "HTTP_AGENT",
+                        "key": "discover.tier0.gateways",
+                        "delay": "1d",
+                        "status": "DISABLED",
+                        "timeout": "5s",
+                        "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/policy/api/v1/infra/tier-0s",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var array = JSON.parse(value);\nvar tier0s = array.results;\nvar lenClusters = Object.keys(tier0s).length;\nvar obj = [];\nvar output = \"{\\\"data\\\":[\";\n\nfor(var i=0; i<lenClusters; i++){\n\n    var tier0Name = \"{\\\"{#TIER0.NAME}\\\": \\\"\" + tier0s[i].display_name + \"\\\",\";\n    var tier0ID = \"\\\"{#TIER0.ID}\\\": \\\"\" + tier0s[i].id + \"\\\"}\";\n    obj.push(tier0Name + tier0ID)\n}\noutput += obj;\noutput += \"]}\"\nreturn output"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

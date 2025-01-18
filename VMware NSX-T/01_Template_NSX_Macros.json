@@ -1,0 +1,67 @@
+{
+    "zabbix_export": {
+        "version": "6.0",
+        "date": "2025-01-17T15:12:24Z",
+        "groups": [
+            {
+                "uuid": "d1a86d4a9ad545ce98deaa658aeeaac0",
+                "name": "Templates"
+            }
+        ],
+        "templates": [
+            {
+                "uuid": "0f585a7147e542c889751616b3e16342",
+                "template": "Template NSX Macros",
+                "name": "Template NSX Macros",
+                "description": "Template contains macros used in other NSX templates. \nMust be linked to templates: Template NSX Management Nodes, Template NSX Edge Transport Nodes andTemplate NSX Cluster Management",
+                "groups": [
+                    {
+                        "name": "Templates"
+                    }
+                ],
+                "macros": [
+                    {
+                        "macro": "{$DOMAIN.NAME}",
+                        "value": "your.domain.local",
+                        "description": "Domain name"
+                    },
+                    {
+                        "macro": "{$ITEM.HISTORY}",
+                        "value": "10d",
+                        "description": "Item History storage period"
+                    },
+                    {
+                        "macro": "{$ITEM.HISTORY.LONG}",
+                        "value": "60d",
+                        "description": "Item History storage period long"
+                    },
+                    {
+                        "macro": "{$ITEM.INTERVAL.SHORT}",
+                        "value": "10m",
+                        "description": "Item Update interval short"
+                    },
+                    {
+                        "macro": "{$ITEM.TREND}",
+                        "value": "365d",
+                        "description": "Item Trend storage period"
+                    },
+                    {
+                        "macro": "{$NSX.MANAGER}",
+                        "value": "nsxmanager",
+                        "description": "NSX Management cluster VIP or Hostname"
+                    },
+                    {
+                        "macro": "{$SSL.CERT.FILE}",
+                        "value": "cert.pem",
+                        "description": "NSX authentication SSL certificate file name"
+                    },
+                    {
+                        "macro": "{$SSL.KEY.FILE}",
+                        "value": "key.pem",
+                        "description": "NSX authentication SSL key file name"
+                    }
+                ]
+            }
+        ]
+    }
+}
