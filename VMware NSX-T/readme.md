@@ -1,6 +1,6 @@
 # VMware NSX-T Zabbix Monitoring Template
 
-This repository contains a **Zabbix Monitoring Templates** specifically designed for monitoring **VMware NSX-T** environments. These templates allows you to monitor critical aspects of VMware NSX-T infrastructure using **Zabbix**, providing visibility into the health, performance, and availability of the NSX-T Data Center components such as:
+This repository contains a **Zabbix Monitoring Templates** designed for monitoring **VMware NSX-T** environment. These templates allow you to monitor critical aspects of VMware NSX-T infrastructure using **Zabbix**, providing visibility into the health, performance, and availability of NSX-T components such as:
 
 - **NSX Management** 
   - Management cluster status
@@ -12,12 +12,12 @@ This repository contains a **Zabbix Monitoring Templates** specifically designed
     -  CPU/Memory usage, Filesystem information, Uptime
     -  Network interface status
     -  Network interface statistics
-       - rx/tx bytes/packets
+  - Compute manager status
 
 
 ## Requirements
 
-Before using this template, ensure that you meet the following prerequisites:
+Before using these templates, ensure that you meet the following prerequisites:
 
 - Zabbix 6.0 or newer
 - VMware NSX-T 3.2 or higher
@@ -26,15 +26,20 @@ Before using this template, ensure that you meet the following prerequisites:
 
 ## Installation
 
-Follow these steps to install and configure the VMware NSX-T Zabbix Monitoring Template:
+Follow these steps to install and configure the VMware NSX-T Zabbix Monitoring Templates:
 1. Import templates to your Zabbix server in the following order:
    - Template_NSX_Macros
    - Template_NSX_Management_Nodes
    - Template_NSX_Edge_Transport_Nodes
    - Template_NSX_Cluster_Management
 2. Edit Macros in template *Template_NSX_Macros* to reflect your environment and needs.
-3. Import private key and certificate of your NSX-T Principal identity user to Zabbix server. Default location:
+3. Import private key and certificate of your NSX-T Principal identity user to a Zabbix server. Default location:
    - SSLCertLocation "/usr/share/zabbix/ssl/certs"
    - SSLKeyLocation "/usr/share/zabbix/ssl/keys"
-4. Link template *Template_NSX_Cluster_Management* to a Zabbix host representing your NSX-T Management cluster VIP or hostname.
-5. Host discovery rules in template *Template_NSX_Cluster_Management* will create Zabbix hosts for each NSX-T Manager Node and NSX-T Edge Transport Node.
+4. Create a Zabbix host to represent your NSX-T Management Cluster VIP or hostname.
+5. Link template *Template_NSX_Cluster_Management* to a Zabbix host created in step 4.
+6. Host discovery rules in template *Template_NSX_Cluster_Management* will create Zabbix hosts for each NSX Manager Node and NSX Edge Transport Node.
+
+
+
+*These templates were created with a limited NSX-T environment deployed (and limited knowledge ¯\\\_(ツ)_/¯) and thus may not monitor all that you wish to monitor.
