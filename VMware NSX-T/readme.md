@@ -1,6 +1,6 @@
 # VMware NSX-T Zabbix Monitoring Template
 
-This repository contains a **Zabbix Monitoring Templates** designed for monitoring **VMware NSX-T** environment. These templates allow you to monitor critical aspects of VMware NSX-T infrastructure using **Zabbix**, providing visibility into the health, performance, and availability of NSX-T components such as:
+This repository contains **Zabbix Monitoring Templates** designed for monitoring **VMware NSX-T** environment. These templates allow you to monitor critical aspects of VMware NSX-T infrastructure using **Zabbix**, providing visibility into the health, performance, and availability of NSX-T components such as:
 
 - **NSX Management** 
   - Management cluster status
