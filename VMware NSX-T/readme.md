@@ -42,4 +42,4 @@ Follow these steps to install and configure the VMware NSX-T Zabbix Monitoring T
 
 
 
-*These templates were created with a limited NSX-T environment deployed (and limited knowledge ¯\\\_(ツ)_/¯) and thus may not monitor all that you wish to monitor.
+*These templates were created with a limited NSX-T environment deployed and thus may not monitor all that you wish to monitor.
