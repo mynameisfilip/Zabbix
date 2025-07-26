@@ -1,7 +1,7 @@
 {
     "zabbix_export": {
         "version": "6.0",
-        "date": "2025-01-17T15:13:11Z",
+        "date": "2025-06-27T14:15:47Z",
         "groups": [
             {
                 "uuid": "e7446ea54447411ca99db9a846454549",
@@ -954,6 +954,63 @@
                                 "type": "JAVASCRIPT",
                                 "parameters": [
                                     "var array = JSON.parse(value);\nvar clusters = array.results;\nvar lenClusters = Object.keys(clusters).length;\nvar obj = [];\nvar output = \"{\\\"data\\\":[\";\n\nfor(var i=0; i<lenClusters; i++){\n    var lenNodes = Object.keys(clusters[i].members).length;\n\n    for(var j=0; j<lenNodes;j++){\n        var a = \"{\\\"{#NODE.NAME}\\\": \\\"\" + clusters[i].members[j].display_name + \"\\\",\";\n        var b = \"\\\"{#NODE.ID}\\\": \\\"\" + clusters[i].members[j].transport_node_id + \"\\\"}\";\n        obj.push((a+b));\n    }\n}\noutput += obj;\noutput += \"]}\"\nreturn output"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "ee9448078ca74191af16dc0fdf69e6a5",
+                        "name": "Discover Host Transport Nodes",
+                        "type": "HTTP_AGENT",
+                        "key": "discover.host.transport.nodes",
+                        "delay": "1d",
+                        "item_prototypes": [
+                            {
+                                "uuid": "81ab3a8b39504a0fbd1ab5de4bab6bde",
+                                "name": "Host Transport Node {#HOST.NODE.NAME} Status",
+                                "type": "HTTP_AGENT",
+                                "key": "host.transport.node.[{#HOST.NODE.NAME}]",
+                                "delay": "{$ITEM.INTERVAL.SHORT}",
+                                "history": "{$ITEM.HISTORY.LONG}",
+                                "trends": "0",
+                                "value_type": "TEXT",
+                                "preprocessing": [
+                                    {
+                                        "type": "JSONPATH",
+                                        "parameters": [
+                                            "$.status"
+                                        ]
+                                    },
+                                    {
+                                        "type": "DISCARD_UNCHANGED_HEARTBEAT",
+                                        "parameters": [
+                                            "3600"
+                                        ]
+                                    }
+                                ],
+                                "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/policy/api/v1{#HOST.NODE.PATH}/status",
+                                "posts": "Readonly\nEnum: UP, UNKNOWN",
+                                "ssl_cert_file": "{$SSL.CERT.FILE}",
+                                "ssl_key_file": "{$SSL.KEY.FILE}",
+                                "trigger_prototypes": [
+                                    {
+                                        "uuid": "85803e37c6d84c39a96dc2a78ac5ef23",
+                                        "expression": "last(/Template NSX Cluster Management/host.transport.node.[{#HOST.NODE.NAME}])<>\"UP\"",
+                                        "name": "Host Transport Node {#HOST.NODE.NAME} Status is {ITEM.VALUE1}",
+                                        "priority": "AVERAGE"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timeout": "5s",
+                        "url": "https://{HOST.NAME}.{$DOMAIN.NAME}/policy/api/v1/infra/sites/default/enforcement-points/default/host-transport-nodes",
+                        "ssl_cert_file": "{$SSL.CERT.FILE}",
+                        "ssl_key_file": "{$SSL.KEY.FILE}",
+                        "preprocessing": [
+                            {
+                                "type": "JAVASCRIPT",
+                                "parameters": [
+                                    "var nodes = JSON.parse(value).results;\nvar lenNodes = Object.keys(nodes).length;\nvar obj = [];\nvar output = \"{\\\"data\\\":[\";\n\nfor(var i=0; i<lenNodes; i++){\n  console.log(nodes[i].node_path)\n    var nodeId = \"{\\\"{#HOST.NODE.ID}\\\": \\\"\" + nodes[i].unique_id + \"\\\",\";\n    var nodeName = \"\\\"{#HOST.NODE.NAME}\\\": \\\"\" + nodes[i].display_name + \"\\\",\";\n    var nodePath = \"\\\"{#HOST.NODE.PATH}\\\": \\\"\" + nodes[i].path + \"\\\"}\";\n    obj.push(nodeId+nodeName+nodePath)\n}\noutput += obj;\noutput += \"]}\"\nreturn output"
                                 ]
                             }
                         ]
